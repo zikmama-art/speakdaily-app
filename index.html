@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="SpeakDaily — Learn real-life English with native audio sentences. Free Android app."/>
+<title>SpeakDaily — Everyday English Sentences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root{--bg:#060F1E;--card:#0D1E35;--border:#1A3355;--orange:#F97316;--blue:#3B82F6;--green:#10B981;--muted:#4A6B8A;--white:#F1F5FB}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+  body.rtl{direction:rtl}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+  .blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.18;pointer-events:none;z-index:0}
+  .blob-1{width:600px;height:600px;background:var(--blue);top:-200px;left:-200px}
+  .blob-2{width:500px;height:500px;background:var(--orange);top:200px;right:-150px}
+  .blob-3{width:400px;height:400px;background:var(--green);bottom:0;left:50%;transform:translateX(-50%)}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,15,30,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,51,85,.5);gap:14px}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:1.2rem;letter-spacing:-0.02em;flex-shrink:0}
+  .nav-logo span{color:var(--orange)}
+  .lang-switcher{display:flex;align-items:center;gap:3px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px 5px;flex-wrap:wrap;justify-content:center}
+  .lang-btn{background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:500;padding:4px 9px;border-radius:100px;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+  .lang-btn.active,.lang-btn:hover{background:var(--orange);color:#fff}
+  .nav-cta{background:var(--orange);color:#fff;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.85rem;padding:8px 18px;border-radius:100px;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(249,115,22,.35);white-space:nowrap;flex-shrink:0}
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(249,115,22,.5)}
+  section{position:relative;z-index:1}
+  .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;padding:120px 80px 80px;max-width:1200px;margin:0 auto}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:var(--blue);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:22px;animation:fadeUp .6s ease both}
+  .hero-badge .dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pulse 2s ease infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .hero-title{font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(2.5rem,4.5vw,3.7rem);line-height:1.06;letter-spacing:-0.03em;animation:fadeUp .6s .1s ease both}
+  .hero-title .accent{background:linear-gradient(135deg,var(--orange),#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{margin-top:18px;color:#8BA4C0;font-size:1.02rem;font-weight:300;max-width:440px;line-height:1.7;animation:fadeUp .6s .2s ease both}
+  .hero-stats{display:flex;gap:26px;margin-top:30px;animation:fadeUp .6s .3s ease both}
+  .stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.45rem}
+  .stat-num span{color:var(--orange)}
+  .stat-label{font-size:.72rem;color:var(--muted);font-weight:400;letter-spacing:.04em;text-transform:uppercase}
+  .stat-divider{width:1px;background:var(--border);align-self:stretch}
+  .download-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;animation:fadeUp .6s .4s ease both}
+  .dl-btn{display:flex;align-items:center;gap:10px;padding:11px 17px;border-radius:14px;text-decoration:none;font-weight:500;font-size:.87rem;transition:transform .2s,box-shadow .2s;border:1px solid transparent;cursor:pointer}
+  .dl-btn:hover{transform:translateY(-3px)}
+  .dl-btn-primary{background:linear-gradient(135deg,var(--orange),#EA6C10);color:#fff;box-shadow:0 4px 24px rgba(249,115,22,.4)}
+  .dl-btn-primary:hover{box-shadow:0 8px 40px rgba(249,115,22,.55)}
+  .dl-btn-secondary{background:var(--card);color:var(--white);border-color:var(--border)}
+  .dl-btn-secondary:hover{border-color:var(--muted);background:#142030}
+  /* ── PLAY STORE BUTTON (hero) ──
+     👉 Pour activer : change display:none en display:flex */
+  .dl-btn-playstore{display:none;align-items:center;gap:10px;padding:11px 17px;border-radius:14px;text-decoration:none;font-weight:500;font-size:.87rem;transition:transform .2s,box-shadow .2s;background:linear-gradient(135deg,#1a8a4a,#148040);color:#fff;box-shadow:0 4px 24px rgba(16,140,64,.4);cursor:pointer}
+  .dl-btn-playstore:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(16,140,64,.55)}
+  .dl-btn-icon{width:29px;height:29px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.98rem;flex-shrink:0}
+  .dl-btn-text{display:flex;flex-direction:column}
+  .dl-btn-text small{font-size:.6rem;opacity:.7;font-weight:300;line-height:1}
+  .dl-btn-text strong{font-size:.87rem;font-weight:600;line-height:1.3}
+  .hero-visual{display:flex;justify-content:center;align-items:center;animation:floatIn .8s .2s ease both}
+  .phone-wrapper{position:relative;width:268px}
+  .phone-outer{background:linear-gradient(145deg,#1E3A5F,#0A1628);border-radius:44px;padding:10px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 40px 80px rgba(0,0,0,.6),0 0 60px rgba(59,130,246,.1);animation:float 4s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .phone-inner{background:#060F1E;border-radius:36px;overflow:hidden;aspect-ratio:9/19;position:relative}
+  .app-screen{width:100%;height:100%;padding:18px 12px;display:flex;flex-direction:column;gap:8px;background:#060F1E}
+  .app-header{display:flex;align-items:center;justify-content:space-between}
+  .app-logo-text{font-family:'Syne',sans-serif;font-size:.86rem;font-weight:900}
+  .app-logo-text .o{color:var(--orange)}.app-logo-text .b{color:var(--blue)}
+  .app-heart{width:26px;height:26px;background:rgba(249,115,22,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+  .app-card-daily{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(249,115,22,.08));border:1px solid rgba(59,130,246,.2);border-radius:13px;padding:10px}
+  .app-label{font-size:.5rem;color:var(--blue);font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:rgba(59,130,246,.15);padding:2px 7px;border-radius:100px;display:inline-block;margin-bottom:4px}
+  .app-phrase-en{font-size:.7rem;font-weight:600;color:#fff;line-height:1.3}
+  .app-phrase-fr{font-size:.6rem;color:var(--blue);margin-top:3px}
+  .app-cats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex:1}
+  .app-cat{background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 3px;gap:3px;font-size:.5rem;color:#8BA4C0}
+  .app-cat-icon{font-size:.9rem}
+  .app-nav-bar{display:flex;justify-content:space-around;border-top:1px solid var(--border);padding-top:6px}
+  .app-nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.41rem;color:var(--muted)}
+  .app-nav-item.active{color:var(--orange)}
+  .app-nav-icon{font-size:.72rem}
+  .phone-badge{position:absolute;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:7px 11px;font-size:.7rem;box-shadow:0 8px 24px rgba(0,0,0,.4);white-space:nowrap}
+  .phone-badge-1{top:20%;right:-86px;animation:float 3.5s 1s ease-in-out infinite}
+  .phone-badge-2{bottom:25%;left:-75px;animation:float 4s .5s ease-in-out infinite}
+  .badge-audio{display:flex;align-items:center;gap:6px;color:var(--green);font-weight:500}
+  .badge-streak{display:flex;align-items:center;gap:6px;color:var(--orange);font-weight:500}
+  .showcase{padding:60px 0}
+  .phrases-ticker{display:flex;flex-direction:column;gap:11px;overflow:hidden;mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
+  .ticker-row{display:flex;gap:11px;animation:ticker 30s linear infinite}
+  .ticker-row:nth-child(2){animation-direction:reverse;animation-duration:25s}
+  @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .phrase-chip{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:9px 17px;white-space:nowrap;font-size:.82rem;display:flex;align-items:center;gap:9px;flex-shrink:0}
+  .phrase-en{color:var(--white);font-weight:500}
+  .phrase-sep{color:var(--border)}
+  .phrase-tr{color:var(--blue);font-weight:300}
+  .features{padding:90px 80px;max-width:1200px;margin:0 auto}
+  .section-label{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:13px}
+  .section-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.7rem,3vw,2.4rem);letter-spacing:-0.02em;line-height:1.15;max-width:530px;margin-bottom:48px}
+  .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+  .feat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:25px;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+  .feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
+  .feat-card:hover{transform:translateY(-4px);border-color:rgba(59,130,246,.3);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+  .feat-icon{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:15px}
+  .feat-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:7px}
+  .feat-desc{font-size:.82rem;color:#6B8FAF;line-height:1.65}
+  .download-section{padding:90px 80px;max-width:1200px;margin:0 auto;text-align:center}
+  .download-glow{position:absolute;width:600px;height:400px;background:radial-gradient(ellipse,rgba(249,115,22,.12),transparent 70%);left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+  .download-title{font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.9rem,3.8vw,2.9rem);letter-spacing:-0.03em;margin-bottom:13px}
+  .download-sub{color:#6B8FAF;font-size:.98rem;max-width:450px;margin:0 auto 42px}
+  .download-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:13px;margin-bottom:26px}
+  .download-big{display:flex;align-items:center;gap:13px;padding:14px 24px;border-radius:17px;text-decoration:none;font-weight:500;font-size:.93rem;transition:transform .2s,box-shadow .2s;border:1px solid transparent;min-width:185px}
+  .download-big:hover{transform:translateY(-4px)}
+  .db-primary{background:linear-gradient(135deg,var(--orange),#EA6C10);color:#fff;box-shadow:0 6px 30px rgba(249,115,22,.45)}
+  .db-primary:hover{box-shadow:0 12px 50px rgba(249,115,22,.6)}
+  .db-secondary{background:var(--card);color:var(--white);border-color:var(--border)}
+  .db-secondary:hover{border-color:#2A5080;background:#102030}
+  /* ── PLAY STORE BUTTON (download section) ──
+     👉 Pour activer : change display:none en display:flex */
+  .db-playstore{display:none;background:linear-gradient(135deg,#1a8a4a,#148040);color:#fff;box-shadow:0 6px 30px rgba(16,140,64,.4)}
+  .db-playstore:hover{box-shadow:0 12px 50px rgba(16,140,64,.55);transform:translateY(-4px)}
+  .db-icon{width:37px;height:37px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+  .db-text{text-align:left}
+  .db-text small{display:block;font-size:.62rem;opacity:.6;font-weight:300}
+  .db-text strong{display:block;font-size:.9rem;font-weight:600}
+  .free-badge{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-size:.8rem;font-weight:500}
+  footer{border-top:1px solid var(--border);padding:34px 80px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+  .footer-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:1.08rem}
+  .footer-logo span{color:var(--orange)}
+  .footer-links{display:flex;gap:20px}
+  .footer-links a{color:var(--muted);text-decoration:none;font-size:.78rem;transition:color .2s}
+  .footer-links a:hover{color:var(--white)}
+  .footer-copy{color:var(--muted);font-size:.74rem}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes floatIn{from{opacity:0;transform:translateY(40px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;padding:100px 22px 60px;text-align:center}
+    .hero-stats{justify-content:center}
+    .download-group{justify-content:center}
+    .hero-sub{max-width:100%}
+    .hero-visual{order:-1}
+    .phone-badge{display:none}
+    .features{padding:55px 22px}
+    .features-grid{grid-template-columns:1fr}
+    .showcase{padding:36px 0}
+    .download-section{padding:55px 22px}
+    footer{flex-direction:column;gap:16px;padding:26px 22px;text-align:center}
+    nav{padding:11px 18px}
+    .lang-btn{padding:3px 7px;font-size:.66rem}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span>Speak</span>Daily</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" data-lang="pt" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" data-lang="hi" onclick="setLang('hi')">HI</button>
+    <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+    <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">AR</button>
+  </div>
+  <a href="#download" class="nav-cta" data-i18n="nav_cta">Download Free</a>
+</nav>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div>
+      <div class="hero-badge"><span class="dot"></span><span data-i18n="badge">Free · No account needed</span></div>
+      <h1 class="hero-title"><span data-i18n="h1">Speak English</span><br/><span class="accent" data-i18n="h2">Every Day</span></h1>
+      <p class="hero-sub" data-i18n="sub">5,123 real-life phrases with native audio. Learn the English people actually speak.</p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">5<span>,123</span></div><div class="stat-label" data-i18n="sp">Phrases</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num">7<span>+</span></div><div class="stat-label" data-i18n="sl">Languages</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-label" data-i18n="sf">Free</div></div>
+      </div>
+      <div class="download-group">
+        <a href="https://speakdaily.en.uptodown.com" class="dl-btn dl-btn-primary" target="_blank">
+          <div class="dl-btn-icon">⬇</div><div class="dl-btn-text"><small data-i18n="dlon">Download on</small><strong>Uptodown</strong></div>
+        </a>
+        <a href="https://apkpure.com/speakdaily" class="dl-btn dl-btn-secondary" target="_blank">
+          <div class="dl-btn-icon">📦</div><div class="dl-btn-text"><small data-i18n="dlon">Download on</small><strong>APKPure</strong></div>
+        </a>
+        <a href="https://www.amazon.com/appstore/speakdaily" class="dl-btn dl-btn-secondary" target="_blank">
+          <div class="dl-btn-icon">🛒</div><div class="dl-btn-text"><small data-i18n="dlon">Download on</small><strong>Amazon</strong></div>
+        </a>
+        <!--
+        ╔══════════════════════════════════════════════════════╗
+        ║  GOOGLE PLAY — DÉSACTIVÉ                            ║
+        ║  Pour activer :                                      ║
+        ║  1. Retire ce commentaire HTML                       ║
+        ║  2. Remplace com.speakdaily.app par ton package      ║
+        ║  3. Dans le CSS, change .dl-btn-playstore{           ║
+        ║     display:none} en display:flex                    ║
+        ╚══════════════════════════════════════════════════════╝
+        <a href="https://play.google.com/store/apps/details?id=com.speakdaily.app"
+           class="dl-btn dl-btn-playstore" target="_blank">
+          <div class="dl-btn-icon">▶</div>
+          <div class="dl-btn-text"><small data-i18n="dlon">Download on</small><strong>Google Play</strong></div>
+        </a>
+        -->
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="phone-wrapper">
+        <div class="phone-badge phone-badge-1"><div class="badge-audio">🎧 <span data-i18n="ba">Native audio</span></div></div>
+        <div class="phone-badge phone-badge-2"><div class="badge-streak">🔥 <span data-i18n="bs">Daily streak</span></div></div>
+        <div class="phone-outer"><div class="phone-inner"><div class="app-screen">
+          <div class="app-header">
+            <div class="app-logo-text"><span class="b">Speak</span><span class="o">Daily</span></div>
+            <div class="app-heart">❤️</div>
+          </div>
+          <div class="app-card-daily">
+            <div class="app-label" data-i18n="pod">Phrase of the day</div>
+            <div class="app-phrase-en">"I'm just checking in — how are you holding up?"</div>
+            <div class="app-phrase-fr" id="mtr">Je prends juste de tes nouvelles</div>
+          </div>
+          <div style="font-size:.55rem;color:#4A6B8A;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:2px" data-i18n="cats">Categories</div>
+          <div class="app-cats">
+            <div class="app-cat"><span class="app-cat-icon">👋</span><span data-i18n="cg">Greetings</span></div>
+            <div class="app-cat"><span class="app-cat-icon">🏠</span><span data-i18n="cd">Daily Life</span></div>
+            <div class="app-cat"><span class="app-cat-icon">✈️</span><span data-i18n="ct">Travel</span></div>
+            <div class="app-cat"><span class="app-cat-icon">🍽️</span><span data-i18n="cf">Food</span></div>
+            <div class="app-cat"><span class="app-cat-icon">💼</span><span data-i18n="cw">Work</span></div>
+            <div class="app-cat"><span class="app-cat-icon">🛒</span><span data-i18n="cs">Shopping</span></div>
+          </div>
+          <div class="app-nav-bar">
+            <div class="app-nav-item active"><span class="app-nav-icon">🏠</span><span data-i18n="nh">Home</span></div>
+            <div class="app-nav-item"><span class="app-nav-icon">📖</span><span data-i18n="nd">Dict</span></div>
+            <div class="app-nav-item"><span class="app-nav-icon">❤️</span><span data-i18n="ns">Saved</span></div>
+            <div class="app-nav-item"><span class="app-nav-icon">⚙️</span><span data-i18n="nm">More</span></div>
+          </div>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<section class="showcase reveal">
+  <div class="phrases-ticker">
+    <div class="ticker-row" id="row1"></div>
+    <div class="ticker-row" id="row2"></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="reveal">
+    <div class="section-label" data-i18n="wl">Why SpeakDaily</div>
+    <h2 class="section-title" data-i18n="wt">Built for how people actually learn</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card reveal"><div class="feat-icon" style="background:rgba(59,130,246,.12)">🎧</div><div class="feat-title" data-i18n="f1t">Native Audio</div><div class="feat-desc" data-i18n="f1d">Every phrase recorded by a real English speaker. Train your ear to understand natural speech.</div></div>
+    <div class="feat-card reveal" style="transition-delay:.1s"><div class="feat-icon" style="background:rgba(249,115,22,.12)">📚</div><div class="feat-title" data-i18n="f2t">5,123 Real Phrases</div><div class="feat-desc" data-i18n="f2d">12 categories covering every situation you'll encounter in daily life.</div></div>
+    <div class="feat-card reveal" style="transition-delay:.2s"><div class="feat-icon" style="background:rgba(16,185,129,.12)">🌍</div><div class="feat-title" data-i18n="f3t">7 Languages</div><div class="feat-desc" data-i18n="f3d">Translations in French, Spanish, Portuguese, Arabic, Hindi and Chinese.</div></div>
+    <div class="feat-card reveal" style="transition-delay:.3s"><div class="feat-icon" style="background:rgba(139,92,246,.12)">📶</div><div class="feat-title" data-i18n="f4t">Works Offline</div><div class="feat-desc" data-i18n="f4d">Study without internet after first use. Perfect for commutes or limited data.</div></div>
+    <div class="feat-card reveal" style="transition-delay:.4s"><div class="feat-icon" style="background:rgba(236,72,153,.12)">🔥</div><div class="feat-title" data-i18n="f5t">Daily Streaks</div><div class="feat-desc" data-i18n="f5d">Track your progress. A few minutes a day adds up faster than you think.</div></div>
+    <div class="feat-card reveal" style="transition-delay:.5s"><div class="feat-icon" style="background:rgba(251,191,36,.12)">🆓</div><div class="feat-title" data-i18n="f6t">Completely Free</div><div class="feat-desc" data-i18n="f6d">No subscriptions, no account required. SpeakDaily is and will always be free.</div></div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download" class="download-section">
+  <div class="download-glow"></div>
+  <div class="reveal">
+    <div class="section-label" data-i18n="dll">Download Free</div>
+    <h2 class="download-title" data-i18n="dlt">Start speaking English today</h2>
+    <p class="download-sub" data-i18n="dls">Available on all major Android stores. No account, no subscription.</p>
+  </div>
+  <div class="download-buttons reveal">
+    <a href="https://speakdaily.en.uptodown.com" class="download-big db-primary" target="_blank">
+      <div class="db-icon">⬇</div><div class="db-text"><small data-i18n="dlon">Download on</small><strong>Uptodown</strong></div>
+    </a>
+    <a href="https://apkpure.com/speakdaily" class="download-big db-secondary" target="_blank">
+      <div class="db-icon">📦</div><div class="db-text"><small data-i18n="dlon">Download on</small><strong>APKPure</strong></div>
+    </a>
+    <a href="https://www.amazon.com/appstore/speakdaily" class="download-big db-secondary" target="_blank">
+      <div class="db-icon">🛒</div><div class="db-text"><small data-i18n="dlon">Download on</small><strong>Amazon Appstore</strong></div>
+    </a>
+    <!--
+    ╔══════════════════════════════════════════════════════╗
+    ║  GOOGLE PLAY — DÉSACTIVÉ                            ║
+    ║  Pour activer :                                      ║
+    ║  1. Retire ce commentaire HTML                       ║
+    ║  2. Remplace com.speakdaily.app par ton package      ║
+    ║  3. Dans le CSS, change .db-playstore{display:none}  ║
+    ║     en display:flex                                  ║
+    ╚══════════════════════════════════════════════════════╝
+    <a href="https://play.google.com/store/apps/details?id=com.speakdaily.app"
+       class="download-big db-playstore" target="_blank">
+      <div class="db-icon">▶</div>
+      <div class="db-text"><small data-i18n="dlon">Download on</small><strong>Google Play</strong></div>
+    </a>
+    -->
+  </div>
+  <div class="reveal"><span class="free-badge">✅ <span data-i18n="ff">Always free · No account required · Android</span></span></div>
+</section>
+
+<footer>
+  <div class="footer-logo"><span>Speak</span>Daily</div>
+  <div class="footer-links">
+    <a href="https://zikmama-art.github.io/speakdaily-privacy-policy/" data-i18n="fp">Privacy Policy</a>
+    <a href="mailto:zikmama@gmail.com" data-i18n="fc">Contact</a>
+    <a href="https://ko-fi.com/zikmama" data-i18n="fsu">Support ☕</a>
+  </div>
+  <div class="footer-copy">© 2025 SpeakDaily</div>
+</footer>
+
+<script>
+const phrases = [
+  {en:"What's up?",         fr:"Quoi de neuf ?",              es:"¿Qué hay?",         pt:"E aí?",              hi:"क्या हाल है?",       zh:"怎么了？",           ar:"ما الجديد؟"},
+  {en:"I'm starving",       fr:"J'ai une faim de loup",       es:"Estoy muerto de hambre",pt:"Estou morrendo de fome",hi:"बहुत भूख लगी है",zh:"我饿坏了",         ar:"أنا جائع جداً"},
+  {en:"No worries",         fr:"Pas de souci",                es:"Sin problema",       pt:"Sem problema",       hi:"कोई बात नहीं",      zh:"没关系",             ar:"لا مشكلة"},
+  {en:"I'm down for it",    fr:"Je suis partant",             es:"Me apunto",          pt:"Topo",               hi:"मैं तैयार हूँ",    zh:"我愿意",             ar:"أنا موافق"},
+  {en:"That's on me",       fr:"C'est de ma faute",           es:"Es culpa mía",       pt:"É culpa minha",      hi:"यह मेरी गलती है",  zh:"这是我的错",          ar:"هذا خطئي"},
+  {en:"Hang in there",      fr:"Tiens bon",                   es:"Aguanta",            pt:"Aguenta firme",      hi:"हिम्मत रखो",       zh:"撑下去",             ar:"اصبر"},
+  {en:"My bad",             fr:"C'est ma faute",              es:"Lo siento",          pt:"Foi mal",            hi:"मेरी गलती",        zh:"我的错",             ar:"أنا آسف"},
+  {en:"Fair enough",        fr:"C'est juste",                 es:"Es justo",           pt:"Justo",              hi:"बिल्कुल सही",      zh:"说得对",             ar:"هذا صحيح"},
+  {en:"I'm exhausted",      fr:"Je suis épuisé",              es:"Estoy agotado",      pt:"Estou esgotado",     hi:"मैं थका हूँ",     zh:"我累坏了",           ar:"أنا منهك"},
+  {en:"You good?",          fr:"Ça va ?",                     es:"¿Estás bien?",       pt:"Tudo bem?",          hi:"सब ठीक?",          zh:"还好吗？",           ar:"هل أنت بخير؟"},
+  {en:"I don't get it",     fr:"Je ne comprends pas",         es:"No lo entiendo",     pt:"Não entendi",        hi:"मुझे समझ नहीं आया",zh:"我不明白",          ar:"لا أفهم"},
+  {en:"That works for me",  fr:"Ça me convient",              es:"Me viene bien",      pt:"Me serve",           hi:"यह मुझे ठीक लगता है",zh:"这对我合适",       ar:"هذا يناسبني"},
+  {en:"I'll be right back", fr:"Je reviens tout de suite",    es:"Ahora vuelvo",       pt:"Já volto",           hi:"अभी आता हूँ",     zh:"马上回来",           ar:"سأعود الآن"},
+  {en:"Let's wrap it up",   fr:"On conclut",                  es:"Terminemos",         pt:"Vamos encerrar",     hi:"समाप्त करते हैं",zh:"我们收尾吧",          ar:"لنختم"},
+  {en:"Could you repeat?",  fr:"Vous pouvez répéter ?",       es:"¿Puede repetirlo?",  pt:"Pode repetir?",      hi:"क्या आप दोहरा सकते हैं?",zh:"能再说一遍吗？",ar:"هل يمكنك التكرار؟"},
+  {en:"Catch you later",    fr:"À plus tard",                 es:"Hasta luego",        pt:"Até logo",           hi:"बाद में मिलते हैं",zh:"再见",              ar:"إلى اللقاء"},
+];
+
+const T={
+  en:{nav_cta:"Download Free",badge:"Free · No account needed",h1:"Speak English",h2:"Every Day",sub:"5,123 real-life phrases with native audio. Learn the English people actually speak — not textbook grammar.",sp:"Phrases",sl:"Languages",sf:"Free",dlon:"Download on",ba:"Native audio",bs:"Daily streak",pod:"Phrase of the day",cats:"Categories",cg:"Greetings",cd:"Daily Life",ct:"Travel",cf:"Food",cw:"Work",cs:"Shopping",nh:"Home",nd:"Dict",ns:"Saved",nm:"More",wl:"Why SpeakDaily",wt:"Built for how people actually learn",f1t:"Native Audio",f1d:"Every phrase recorded by a real English speaker. Train your ear to understand natural speech.",f2t:"5,123 Real Phrases",f2d:"12 categories covering every situation you'll encounter in daily life.",f3t:"7 Languages",f3d:"Translations in French, Spanish, Portuguese, Arabic, Hindi and Chinese.",f4t:"Works Offline",f4d:"Study without internet after first use. Perfect for commutes or limited data.",f5t:"Daily Streaks",f5d:"Track your progress. A few minutes a day adds up faster than you think.",f6t:"Completely Free",f6d:"No subscriptions, no account required. SpeakDaily is and will always be free.",dll:"Download Free",dlt:"Start speaking English today",dls:"Available on all major Android stores. No account, no subscription.",ff:"Always free · No account required · Android",fp:"Privacy Policy",fc:"Contact",fsu:"Support ☕",mtr:"Je prends juste de tes nouvelles",tlang:"fr",dir:"ltr"},
+  fr:{nav_cta:"Télécharger gratuitement",badge:"Gratuit · Sans compte",h1:"Parle anglais",h2:"Chaque jour",sub:"5 123 phrases de la vie réelle avec audio natif. Apprends l'anglais qu'on parle vraiment.",sp:"Phrases",sl:"Langues",sf:"Gratuit",dlon:"Télécharger sur",ba:"Audio natif",bs:"Série quotidienne",pod:"Phrase du jour",cats:"Catégories",cg:"Salutations",cd:"Vie quotidienne",ct:"Voyage",cf:"Repas",cw:"Travail",cs:"Shopping",nh:"Accueil",nd:"Dico",ns:"Sauvés",nm:"Plus",wl:"Pourquoi SpeakDaily",wt:"Conçu pour apprendre vraiment",f1t:"Audio natif",f1d:"Chaque phrase enregistrée par un vrai locuteur anglais. Entraîne ton oreille à l'anglais naturel.",f2t:"5 123 phrases réelles",f2d:"12 catégories couvrant chaque situation du quotidien.",f3t:"7 langues",f3d:"Traductions en français, espagnol, portugais, arabe, hindi et chinois.",f4t:"Fonctionne hors ligne",f4d:"Consulte et apprends sans internet après le premier usage.",f5t:"Séries quotidiennes",f5d:"Suis ta progression. Quelques minutes par jour font une vraie différence.",f6t:"100% gratuit",f6d:"Pas d'abonnement, pas de compte requis. SpeakDaily sera toujours gratuit.",dll:"Télécharger",dlt:"Commence à parler anglais aujourd'hui",dls:"Disponible sur tous les grands stores Android. Sans compte, sans abonnement.",ff:"Toujours gratuit · Sans compte · Android",fp:"Confidentialité",fc:"Contact",fsu:"Soutenir ☕",mtr:"Je prends juste de tes nouvelles",tlang:"fr",dir:"ltr"},
+  es:{nav_cta:"Descargar gratis",badge:"Gratis · Sin cuenta",h1:"Habla inglés",h2:"Cada día",sub:"5.123 frases de la vida real con audio nativo. Aprende el inglés que la gente realmente habla.",sp:"Frases",sl:"Idiomas",sf:"Gratis",dlon:"Descargar en",ba:"Audio nativo",bs:"Racha diaria",pod:"Frase del día",cats:"Categorías",cg:"Saludos",cd:"Vida diaria",ct:"Viajes",cf:"Comida",cw:"Trabajo",cs:"Compras",nh:"Inicio",nd:"Dicc",ns:"Guardado",nm:"Más",wl:"Por qué SpeakDaily",wt:"Diseñado para aprender de verdad",f1t:"Audio nativo",f1d:"Cada frase grabada por un hablante nativo. Entrena tu oído para entender el inglés natural.",f2t:"5.123 frases reales",f2d:"12 categorías para cada situación.",f3t:"7 idiomas",f3d:"Traducciones en francés, español, portugués, árabe, hindi y chino.",f4t:"Funciona sin internet",f4d:"Estudia sin conexión tras el primer uso.",f5t:"Rachas diarias",f5d:"Sigue tu progreso. Unos minutos al día marcan la diferencia.",f6t:"Completamente gratis",f6d:"Sin suscripción, sin cuenta. SpeakDaily siempre será gratuito.",dll:"Descargar gratis",dlt:"Empieza a hablar inglés hoy",dls:"Disponible en las principales tiendas Android.",ff:"Siempre gratis · Sin cuenta · Android",fp:"Privacidad",fc:"Contacto",fsu:"Apoyar ☕",mtr:"Solo me pongo en contacto — ¿cómo estás?",tlang:"es",dir:"ltr"},
+  pt:{nav_cta:"Baixar grátis",badge:"Gratuito · Sem conta",h1:"Fale inglês",h2:"Todo dia",sub:"5.123 frases do cotidiano com áudio nativo. Aprenda o inglês que as pessoas realmente falam.",sp:"Frases",sl:"Idiomas",sf:"Grátis",dlon:"Baixar em",ba:"Áudio nativo",bs:"Sequência diária",pod:"Frase do dia",cats:"Categorias",cg:"Saudações",cd:"Vida diária",ct:"Viagem",cf:"Comida",cw:"Trabalho",cs:"Compras",nh:"Início",nd:"Dicio",ns:"Salvos",nm:"Mais",wl:"Por que SpeakDaily",wt:"Feito para aprender de verdade",f1t:"Áudio nativo",f1d:"Cada frase gravada por um falante nativo.",f2t:"5.123 frases reais",f2d:"12 categorias para cada situação.",f3t:"7 idiomas",f3d:"Traduções em francês, espanhol, português, árabe, hindi e chinês.",f4t:"Funciona offline",f4d:"Estude sem internet após o primeiro uso.",f5t:"Sequências diárias",f5d:"Acompanhe seu progresso.",f6t:"Completamente grátis",f6d:"Sem assinatura, sem conta. SpeakDaily é e sempre será gratuito.",dll:"Baixar grátis",dlt:"Comece a falar inglês hoje",dls:"Disponível nas principais lojas Android.",ff:"Sempre grátis · Sem conta · Android",fp:"Privacidade",fc:"Contato",fsu:"Apoiar ☕",mtr:"Só estou verificando — como você está?",tlang:"pt",dir:"ltr"},
+  hi:{nav_cta:"मुफ़्त डाउनलोड करें",badge:"मुफ़्त · बिना अकाउंट के",h1:"अंग्रेज़ी बोलें",h2:"हर रोज़",sub:"5,123 असली वाक्य और नेटिव ऑडियो के साथ। वो अंग्रेज़ी सीखें जो लोग वाकई बोलते हैं।",sp:"वाक्य",sl:"भाषाएँ",sf:"मुफ़्त",dlon:"डाउनलोड करें",ba:"नेटिव ऑडियो",bs:"डेली स्ट्रीक",pod:"आज का वाक्य",cats:"श्रेणियाँ",cg:"अभिवादन",cd:"दैनिक जीवन",ct:"यात्रा",cf:"खाना",cw:"काम",cs:"खरीदारी",nh:"होम",nd:"शब्दकोश",ns:"सहेजे",nm:"अधिक",wl:"SpeakDaily क्यों?",wt:"सीखने के असली तरीके के लिए बना",f1t:"नेटिव ऑडियो",f1d:"हर वाक्य असली अंग्रेज़ी बोलने वाले ने रिकॉर्ड किया।",f2t:"5,123 असली वाक्य",f2d:"12 श्रेणियां — हर दैनिक स्थिति के लिए।",f3t:"7 भाषाएँ",f3d:"फ्रेंच, स्पेनिश, पुर्तगाली, अरबी, हिंदी और चीनी में अनुवाद।",f4t:"ऑफलाइन काम करता है",f4d:"पहले उपयोग के बाद बिना इंटरनेट पढ़ें।",f5t:"डेली स्ट्रीक",f5d:"अपनी प्रगति ट्रैक करें। हर दिन कुछ मिनट बड़ा फर्क डालते हैं।",f6t:"पूरी तरह मुफ़्त",f6d:"कोई सब्सक्रिप्शन नहीं, कोई अकाउंट नहीं।",dll:"मुफ़्त डाउनलोड",dlt:"आज से अंग्रेज़ी बोलना शुरू करें",dls:"सभी प्रमुख Android स्टोर पर उपलब्ध।",ff:"हमेशा मुफ़्त · बिना अकाउंट · Android",fp:"गोपनीयता नीति",fc:"संपर्क",fsu:"सहयोग ☕",mtr:"मैं बस हाल जानने आया — तुम कैसे हो?",tlang:"hi",dir:"ltr"},
+  zh:{nav_cta:"免费下载",badge:"免费 · 无需注册",h1:"用英语交流",h2:"每一天",sub:"5,123个日常对话句型，配有母语者真实录音。学习人们实际使用的英语。",sp:"句子",sl:"语言",sf:"免费",dlon:"下载于",ba:"母语音频",bs:"每日连续",pod:"今日句子",cats:"分类",cg:"问候",cd:"日常生活",ct:"旅行",cf:"饮食",cw:"工作",cs:"购物",nh:"主页",nd:"词典",ns:"收藏",nm:"更多",wl:"为什么选择SpeakDaily",wt:"专为真正学习而设计",f1t:"母语音频",f1d:"每个句子均由真实的英语母语者录制。",f2t:"5,123个真实句子",f2d:"12个类别涵盖日常所有场景。",f3t:"7种语言",f3d:"支持法语、西班牙语、葡萄牙语、阿拉伯语、印地语和中文翻译。",f4t:"离线使用",f4d:"首次使用后无需网络即可学习。",f5t:"每日连续记录",f5d:"跟踪学习进度，保持学习动力。",f6t:"完全免费",f6d:"无订阅费，无需账户。SpeakDaily永远免费。",dll:"免费下载",dlt:"今天就开始说英语",dls:"适用于所有主流Android应用商店。",ff:"永久免费 · 无需账户 · Android",fp:"隐私政策",fc:"联系我们",fsu:"支持 ☕",mtr:"我只是来问问你——你还好吗？",tlang:"zh",dir:"ltr"},
+  ar:{nav_cta:"تحميل مجاني",badge:"مجاني · بدون حساب",h1:"تحدث الإنجليزية",h2:"كل يوم",sub:"5,123 جملة من الحياة اليومية مع صوت أصيل. تعلم الإنجليزية التي يتحدثها الناس فعلاً.",sp:"جملة",sl:"لغة",sf:"مجاني",dlon:"تحميل من",ba:"صوت أصيل",bs:"يوم متتالي",pod:"جملة اليوم",cats:"الفئات",cg:"التحيات",cd:"الحياة اليومية",ct:"السفر",cf:"الطعام",cw:"العمل",cs:"التسوق",nh:"الرئيسية",nd:"قاموس",ns:"محفوظ",nm:"المزيد",wl:"لماذا SpeakDaily",wt:"مصمم لطريقة التعلم الحقيقية",f1t:"صوت أصيل",f1d:"كل جملة مسجلة بواسطة متحدث إنجليزي حقيقي.",f2t:"5,123 جملة حقيقية",f2d:"12 فئة لكل موقف في حياتك اليومية.",f3t:"7 لغات",f3d:"ترجمات بالفرنسية والإسبانية والبرتغالية والعربية والهندية والصينية.",f4t:"يعمل بدون إنترنت",f4d:"تصفح وادرس بدون إنترنت بعد الاستخدام الأول.",f5t:"سلسلة يومية",f5d:"تتبع تقدمك. بضع دقائق يومياً تحدث فرقاً كبيراً.",f6t:"مجاني تماماً",f6d:"لا اشتراكات، لا حساب مطلوب. SpeakDaily مجاني دائماً.",dll:"تحميل مجاني",dlt:"ابدأ بالتحدث بالإنجليزية اليوم",dls:"متاح في جميع متاجر Android الرئيسية.",ff:"مجاني دائماً · بدون حساب · Android",fp:"سياسة الخصوصية",fc:"تواصل معنا",fsu:"الدعم ☕",mtr:"أنا فقط أطمئن عليك — كيف حالك؟",tlang:"ar",dir:"rtl"}
+};
+
+function buildTicker(){
+  const row1=document.getElementById('row1');
+  const row2=document.getElementById('row2');
+  if(!row1||!row2)return;
+  row1.innerHTML='';row2.innerHTML='';
+  const lang=window._currentLang||'en';
+  const half1=phrases.slice(0,8), half2=phrases.slice(8,16);
+  function chip(p){
+    const tr=p[lang]||p['fr'];
+    return `<div class="phrase-chip"><span class="phrase-en">${p.en}</span><span class="phrase-sep">·</span><span class="phrase-tr">${tr}</span></div>`;
+  }
+  const r1=[...half1,...half1].map(chip).join('');
+  const r2=[...half2,...half2].map(chip).join('');
+  row1.innerHTML=r1; row2.innerHTML=r2;
+}
+
+function setLang(lang){
+  const t=T[lang]; if(!t)return;
+  window._currentLang=lang;
+  document.documentElement.lang=lang;
+  document.body.classList.toggle('rtl',t.dir==='rtl');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(t[k]!==undefined)el.textContent=t[k];
+  });
+  const mtr=document.getElementById('mtr');
+  if(mtr)mtr.textContent=t.mtr;
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.lang===lang);
+  });
+  buildTicker();
+  try{localStorage.setItem('sd_lang',lang);}catch(e){}
+}
+
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+(function(){
+  let saved='en';
+  try{saved=localStorage.getItem('sd_lang')||'en';}catch(e){}
+  if(!T[saved])saved='en';
+  setLang(saved);
+})();
+</script>
+</body>
+</html>
